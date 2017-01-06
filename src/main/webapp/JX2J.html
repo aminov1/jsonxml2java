@@ -12,8 +12,12 @@
             font-family: hemiHead;
             src: url(hemi_head_bd_it.ttf);
         }
-
-        h1, h2, h3, li.navigationBar {
+        .navigationBar {
+            color: #08f6f0;
+            font-family: hemiHead, "Helvetica Neue", Helvetica, Arial, sans-serif;
+            text-align: left;
+        }
+        h1, h2, h3 {
             color: #08f6f0; /*neon like*/
             font-family: hemiHead, "Helvetica Neue", Helvetica, Arial, sans-serif;
             text-align: center;
@@ -45,6 +49,7 @@
             background-color: #08f6f0;
             color: black;
         }
+
         textarea {
             position: relative;
             display: block;
@@ -66,11 +71,13 @@
 <body onload="assignListeners()">
 <h1>JSON 2 Java Converter</h1>
 <div class="navigationBar">
+
     <ul class="navigationBar">
         <li class="navigationBar"><a class="active" href="#json">JSON</a></li>
         <li class="navigationBar"><a href="#XML">XML</a></li>
     </ul>
 
+    
 </div>
 
 <textarea onkeydown="enableTabs(event)"></textarea>
@@ -98,12 +105,14 @@
     }
 
     function enableTabs(event) {
-        var x = event.key;
+        var x = event.key, cursor = 0; //'cursor' is the current position of the cursor
         var target = event.target;
 
         if(x == "Tab") {
             event.preventDefault();
-            target.value += "\t";
+            cursor = target.selectionStart;
+            target.value = target.value.substring(0, cursor) + "\t" + target.value.substring(target.selectionEnd);
+            target.selectionEnd = cursor + "\t".length;
         }
     }
 </script>
