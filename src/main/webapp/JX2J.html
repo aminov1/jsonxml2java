@@ -25,15 +25,43 @@
         div.navigationBar {
             position: relative;
             float: left;
-            height: 610px;
+            height: 590px;
             width: 20%;
+            top: 25px;
+        }
+        #about {
+            position: relative;
+            padding: 25px 0 0 10px;
+            margin-left: 15%;
+            margin-right: 10px;
+            top: 0;
+            display: block;
+            height: 60px;
+            width: 75%;
+            font-size: 2em;
+            text-decoration: none;
+            transition: box-shadow 500ms;
+        }
+        #description {
+            position: relative;
+            display: inline-block;
+            top: 15px;
+            width: 50%;
+            padding: 10px;
+            color: yellow;
+            border: 2px solid #08f6f0;
+            border-radius: 8px;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 1em;
+            z-index: 1;
+            opacity: 0;
+            transition: opacity 500ms;
         }
         ul.navigationBar {
             position: relative;
             list-style-type: none;
             width: 100%;
             padding-left: 15%;
-            top: 85px;
         }
         li.navigationBar a {
             position: relative;
@@ -61,12 +89,20 @@
             color: #08f6f0;
             transition: all 400ms;
         }
+        #about:hover {
+            box-shadow: 0 0 0 2px #08f6f0;
+            visibility: visible;
+            transition: all 400ms;
+        }
         input#objName {
             position: relative;
-            top: 110px;
+            top: 25px;
             left: 15%;
-            width: 75%;
+            width: 63%;
             height: 40px;
+            padding-left: 45px;
+            background-image: url(java_icon_small.png);
+            background-repeat: no-repeat;
             border-radius: 8px;
             border: 3px solid #08f6f0;
             font-size: 1em;
@@ -74,7 +110,7 @@
         }
         button#convert {
             position: relative;
-            top: 270px;
+            top: 178px;
             left: 15%;
             height: 60px;
             width: 75%;
@@ -88,8 +124,8 @@
         textarea#inputObj {
             position: relative;
             display: block;
-            top: 100px;
-            height: 472px;
+            top: 20px;
+            height: 465px;
             width: 75%;
             border: 5px solid #08f6f0;
             border-radius: 8px;
@@ -109,7 +145,14 @@
 </head>
 <body onload="assignListeners()">
 <h1>JSON and XML 2 Java Converter</h1>
+<div id="description">This tool gets JSON or XML objects as inputs and returns Java POJO (Plain Old Java Object) as an output .java
+    file. You can specify the name of the Java output object in the text field on the left. The default name is MyObj
+    (File name: MyObj.java).<br>
+    Developed by: Amin Habash. Email: habashdevelopments@gmail.com
+</div>
 <div class="navigationBar">
+
+    <span id="about" onmouseover="showDescription(true)" onmouseout="showDescription(false)">About</span>
 
     <ul class="navigationBar">
         <li class="navigationBar"><a class="active" href="#json">JSON</a></li>
@@ -138,8 +181,14 @@
             alert("Processing...");
         });
         convert.addEventListener("click", function() {
-            document.getElementById("input").value += "Test";
+            document.getElementById("inputObj").value += "Test";
         });
+    }
+
+    function showDescription(show) {
+        var desc = document.getElementById("description");
+        desc.style.transition = "opacity 500ms";
+        desc.style.opacity = show ? 1 : 0;
     }
 
     function changeActive(event) {
