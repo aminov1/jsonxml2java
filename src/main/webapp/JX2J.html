@@ -12,6 +12,18 @@
             font-family: hemiHead;
             src: url(hemi_head_bd_it.ttf);
         }
+        #loadingBackground {
+            display: none;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            right: 0;
+            left: 0;
+            background-color: black;
+            opacity: 0.7;
+            -moz-opacity: 0.7;
+            z-index: 2;
+        }
         .navigationBar {
             color: #08f6f0;
             font-family: hemiHead, "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -25,7 +37,7 @@
         div.navigationBar {
             position: relative;
             float: left;
-            height: 590px;
+            height: 560px;
             width: 20%;
             top: 25px;
         }
@@ -34,6 +46,7 @@
             padding: 25px 0 0 10px;
             margin-left: 15%;
             margin-right: 10px;
+            margin-bottom: 15px;
             top: 0;
             display: block;
             height: 60px;
@@ -62,6 +75,7 @@
             list-style-type: none;
             width: 100%;
             padding-left: 15%;
+            margin: 0;
         }
         li.navigationBar a {
             position: relative;
@@ -124,15 +138,16 @@
         textarea#inputObj {
             position: relative;
             display: block;
+            overflow: auto;
             top: 20px;
-            height: 465px;
+            height: 450px;
             width: 75%;
             border: 5px solid #08f6f0;
             border-radius: 8px;
             background-color: black;
             color: white;
             text-align: start;
-            font-size: 1.5em;
+            font-size: 1.3em;
             font-family: "Courier New", monospace;
             -moz-tab-size: 4; /* Code for Firefox */
             -o-tab-size: 4; /* Code for Opera 10.6-12.1 */
@@ -140,16 +155,34 @@
             resize: none;
             transition: box-shadow 500ms;
         }
+        #loadingSign {
+            display: none;
+            position: absolute;
+            z-index: 3;
+            height: 240px;
+            width: 280px;
+            left: 42%;
+            border: 4px solid #08f6f0;
+            opacity: 5;
+        }
+        img.loading-gif {
+            display: none;
+            height: 240px;
+            width: 280px;
+        }
 
     </style>
 </head>
 <body onload="assignListeners()">
+
 <h1>JSON and XML 2 Java Converter</h1>
+
 <div id="description">This tool gets JSON or XML objects as inputs and returns Java POJO (Plain Old Java Object) as an output .java
     file. You can specify the name of the Java output object in the text field on the left. The default name is MyObj
-    (File name: MyObj.java).<br>
+    (Output file name: MyObj.java).<br>
     Developed by: Amin Habash. Email: habashdevelopments@gmail.com
 </div>
+
 <div class="navigationBar">
 
     <span id="about" onmouseover="showDescription(true)" onmouseout="showDescription(false)">About</span>
@@ -159,14 +192,26 @@
         <li class="navigationBar"><a href="#XML">XML</a></li>
     </ul>
 
-    <input id="objName" placeholder="Object's Name: MyObj"></input>
+    <input id="objName" placeholder="Object's Name: MyObj">
 
     <button id="convert">Convert</button>
+
+</div>
+
+<div id="loadingSign" class="whileLoading">
+
+    <img id="json-gif" class="loading-gif" src="loading_json.gif">
+    <img id="xml-gif" class="loading-gif" src="loading_xml.gif">
+
 </div>
 
 <textarea id="inputObj" onkeydown="enableTabs(event)"></textarea>
 
-<script>
+<div id="loadingBackground" class="whileLoading"></div>
+
+
+
+<script type="application/javascript">
 
     function assignListeners() {
         //Navigation Bar links
@@ -178,13 +223,30 @@
         //Convert Button
         var convert = document.getElementById("convert");
         convert.addEventListener("click",function() {
-            alert("Processing...");
+            disableElements(true);
+            setTimeout(function() {
+                disableElements(false);}, 5000);
         });
-        convert.addEventListener("click", function() {
-            document.getElementById("inputObj").value += "Test";
-        });
-    }
 
+    }
+    function disableElements(disable) {
+        var loadingItems = document.getElementsByClassName("whileLoading");
+
+        var i;
+        for(i = 0; i < loadingItems.length; i++) {
+            if(disable) {
+                loadingItems[i].style.display = "block";
+            }
+            else {
+                loadingItems[i].style.display = "none";
+            }
+        }
+        var active = document.getElementsByClassName("active")[0];
+        if(disable) {
+            document.getElementById(active.innerHTML.toLowerCase() + "-gif").style.display = "block";
+        }
+        else document.getElementById(active.innerHTML.toLowerCase() + "-gif").style.display = "none";
+    }
     function showDescription(show) {
         var desc = document.getElementById("description");
         desc.style.transition = "opacity 500ms";
